@@ -10,16 +10,25 @@ from pathlib import Path
 from .utils import color_text, NA_cols
 from typing import List, Tuple
 
-def load_lidar_data_10min(lidar_file):
-    # This function loads the lidar data must be 10 minutes averaged data
-    # because of that we don't need to resample the data and standard deviation is not needed
-    # lidar file format should be: a CSV file with columns: Time and Date, Wind Speed, Wind Direction
-    # inputs:
-    # lidar_file: the path to the CSV file containing the lidar data
-    # output:
-    # lidar_avg: the average wind speed and direction for each 10 minute interval
-    # height_lidar: the heights of the lidar data
+def load_lidar_data_10min(lidar_file: str) -> Tuple[pd.DataFrame, np.ndarray, pd.DataFrame]:
+    """
+    Load LiDAR data that is already averaged to 10-minute intervals.
+    Therefore, we don't need to resample the data and standard deviation is not needed
+    Parameters:
+    -----------
+    lidar_file : str
+        Path to the CSV file containing the LiDAR data.
+        CSV file is expected to have columns for Time and Date, wind speed, and wind direction
 
+    Returns:
+    --------
+    lidar_avg : pd.DataFrame
+        DataFrame containing the average wind speed and direction for each 10-minute interval.
+    height_lidar : np.ndarray
+        Array containing the heights of the LiDAR data.
+    lidar_std : pd.DataFrame
+        DataFrame containing the standard deviation of wind speed and direction for each 10-minute interval.
+    """
 
     ##1- load lidar data
     lidar_data = pd.read_csv(lidar_file, skiprows=1)
@@ -75,15 +84,25 @@ def load_lidar_data_10min(lidar_file):
     return lidar_avg, height_lidar, lidar_std
 
 def load_lidar_data(lidar_file):
-    # lidar file format should be: a CSV file with columns: Time and Date, Wind Speed, Wind Direction
-    # Read the CSV file    
-    # inputs:
-    # lidar_file: the path to the CSV file containing the lidar data
-    # output:
-    # lidar_avg: the average wind speed and direction for each 10 minute interval
-    # lidar_numeric: the wind speed and direction dataframe of the lidar data
-    # height_lidar: the heights of the lidar data
+    """
+    Load high frequency LiDAR data from a CSV file and resample it to 10-minute intervals.
+    Parameters:
+    -----------
+    lidar_file : str
+        Path to the CSV file containing the LiDAR data. 
+        CSV file is expected to have columns for Time and Date, wind speed, and wind direction
 
+    Returns:
+    --------
+    lidar_avg : pd.DataFrame
+        DataFrame containing the average wind speed and direction for each 10-minute interval.
+    lidar_numeric : pd.DataFrame
+        DataFrame containing the wind speed and direction data.
+    height_lidar : np.ndarray
+        Array containing the heights of the LiDAR data.
+    lidar_std : pd.DataFrame
+        DataFrame containing the standard deviation of wind speed and direction for each 10-minute interval.
+    """
     lidar_data = pd.read_csv(lidar_file, skiprows=1)
     lidar_data.columns = [col.strip() for col in lidar_data.columns] # remove whitespace from beginning and end of column names
     lidar_data['Time'] = pd.to_datetime(lidar_data['Time and Date'], format='%d/%m/%Y %H:%M:%S') # parse date and time
@@ -145,14 +164,22 @@ def load_lidar_data(lidar_file):
     return lidar_avg, lidar_numeric, height_lidar, lidar_std
                                   
                                   
-def lidar_finder(pth_lidar_base: str, start_date=None, end_date=None):
+def lidar_finder(pth_lidar_base: str, start_date=None, end_date=None) -> List[str]: 
     """
     find all csv files in a directory and subdirectories
-    input: 
-    pth_lidar_base: path to lidar files
+    Paremeters:
+    ----------- 
+        pth_lidar_base: str
+            path to lidar files
+    start_date: pd.Timestamp or None
+        start date to filter files
+    end_date: pd.Timestamp or None
+        end date to filter files
     
-    output: 
-      lidar_csvs: list of csv files
+    Returns:
+    -------- 
+      lidar_csvs: List[str]
+        list of lidar csv files found in the directory and subdirectories
 
     """
     print(f"Looking for lidar files between {start_date.date()} and {(end_date - pd.Timedelta(days=1)).date()}.")
@@ -194,21 +221,46 @@ def lidar_finder(pth_lidar_base: str, start_date=None, end_date=None):
 
 
 def _as_path_list(lidar_files):
-    """Accept a single CSV path or a list of CSV paths. If a folder path is given, glob *.CSV."""
-    if isinstance(lidar_files, (list, tuple)):
-        return [str(p) for p in lidar_files]
-    p = Path(lidar_files)
-    if p.is_dir():
+    """
+    No matter how the user specifies LiDAR input, the rest code always receives a list of file paths.
+    becasue a users might pass a single file path or a list  or tuple of file paths or a directory containing many CSV files
+    This function normalizes all of those cases into one consistent format.
+
+    Parameters
+    ----------
+    lidar_files : str or list or tuple
+        Path to LiDAR CSV file(s) or directory containing LiDAR CSV files.
+    Returns:
+    -------
+    list of str
+        List of LiDAR CSV file paths.
+    
+    """
+    if isinstance(lidar_files, (list, tuple)): # list or tuple case 
+        return [str(p) for p in lidar_files] 
+    p = Path(lidar_files) # convert to Path object
+    if p.is_dir(): # directory case
         return [str(x) for x in sorted(p.glob("*.CSV"))] + [str(x) for x in sorted(p.glob("*.csv"))]
-    return [str(p)]
+    return [str(p)] # single file path case
 
 def load_and_concat_lidar(lidar_files):
     """
-    Reads one or many lidar CSVs and returns two concatenated frames:
-      lidar_avg_all, lidar_std_all
-    Works with your two loaders:
+    Reads one or many lidar CSVs and returns two concatenated frames.
+    Note that this function works with your two loaders:
       - load_lidar_data (1 s data -> returns avg, numeric, heights, std)
       - load_lidar_data_10min (10 min data -> returns avg, heights, std)
+
+    Parameters:
+    ----------
+    lidar_files : str or list or tuple
+        Path to LiDAR CSV file(s) or directory containing LiDAR CSV files.
+    
+    Returns:
+    -------
+        lidar_avg_all : pd.DataFrame
+            Concatenated DataFrame of LiDAR average data from all files.
+        lidar_std_all : pd.DataFrame
+            Concatenated DataFrame of LiDAR standard deviation data from all files.
     """
     paths = _as_path_list(lidar_files)
     if not paths:

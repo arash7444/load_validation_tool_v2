@@ -79,6 +79,18 @@ def mat_finder(pth_mat_base: str, start_date=None, end_date=None) -> list:
 
 
 def extract_heights(df_ws):
+    """
+    extract heights from dataframe columns
+    Parameters
+    ----------
+    df_ws : pandas.DataFrame
+        Dataframe from read_matfile (Main office MAT files)
+
+    Returns
+    -------
+    height : list
+    
+    """
     ws_fields = [f for f in df_ws.columns if f.startswith('L_WS_')]
 
     # for i in range(0,len(ws_fields)):
@@ -89,6 +101,17 @@ def extract_heights(df_ws):
     return height
 
 def read_matfile(matfile):
+    """
+    read mat file and return dataframe
+    Parameters
+    ----------
+    matfile : str
+        Path to MAT file.
+    Returns
+    -------
+    df_ws : pandas.DataFrame
+        Dataframe from read_matfile (Main office MAT files)
+    """
     from scipy.io import loadmat, whosmat
     # matfile = r'h:\004_Loads\Data\H2A_RCA\H2A_2025-07-07_16-10-00.mat'
     # print(whosmat(matfile))  # -> list of (name, shape, dtype)
