@@ -3,19 +3,26 @@ requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
 
 
-[tool.setuptools]
-name = "demo-csv-linter"
-version = "0.0.1"
-description = "demo python CLI tool to lint csv files"
-author = "Alfredo Deza"
-url = "https://github.com/alfredodeza/python-cli"
-
-
-[options]
-packages = find:
-install_requires = ["click==7.1.2", "pandas==1.2.0"]
-
-
-[options.entry_points]
-console_scripts =
-    csv-linter = csv_linter.main:main
+[project]
+name = "wind_validation"
+version = "0.9.0"
+description = "Wind turbine load validation and data processing tools"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "numpy",
+	"plotly",
+	"seaborn",
+    "pandas",
+    "matplotlib",
+	"datetime",
+	"streamlit",
+	"sys",
+	"os",
+	"scipy",
+	"re",
+	"xarray",
+	"warnings",
+	"typing",
+	"pathlib",
+]
