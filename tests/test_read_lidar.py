@@ -9,8 +9,6 @@ from load_validation_tool.data_readers import (
     detect_heights,
     color_text,
     NA_cols,
-    _SPEED_RE,
-    _DIR_RE,
 )
 import pandas as pd
 
