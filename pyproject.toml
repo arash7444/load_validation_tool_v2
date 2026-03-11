@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 
 [project]
-name = "wind_validation"
+name = "load_validation_tool"
 version = "0.9.0"
 description = "Wind turbine load validation and data processing tools"
 readme = "README.md"
@@ -15,14 +15,9 @@ dependencies = [
 	"seaborn",
     "pandas",
     "matplotlib",
-	"datetime",
 	"streamlit",
-	"sys",
-	"os",
 	"scipy",
-	"re",
 	"xarray",
-	"warnings",
-	"typing",
-	"pathlib",
 ]
+[tool.setuptools.packages.find]
+where = ["src"]

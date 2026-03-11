@@ -3,13 +3,6 @@ plotly
 seaborn
 pandas
 matplotlib
-datetime
 streamlit
-sys
-os
 scipy
-re
 xarray
-warnings
-typing
-pathlib
