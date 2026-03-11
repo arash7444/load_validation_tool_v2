@@ -238,7 +238,9 @@ def lidar_finder(pth_lidar_base: str, start_date=None, end_date=None) -> List[st
         lidar_csvs = [pth_lidar_base]
     else:
         lidar_csvs = []
-        for p in Path(pth_lidar_base).rglob("*.csv"):
+        # for p in Path(pth_lidar_base).rglob("*.csv"): # i need to look for both csv and CSV
+        all_csvs = list(Path(pth_lidar_base).rglob("*.csv")) + list(Path(pth_lidar_base).rglob("*.CSV"))
+        for p in all_csvs:    
             if start_date is None:
                 lidar_csvs.append(str(p))
                 continue

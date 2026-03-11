@@ -56,7 +56,9 @@ def mat_finder(pth_mat_base: str, start_date=None, end_date=None) -> list:
         return mat_files
 
     # --- Otherwise, search a directory recursively ---
-    for f in Path(pth_mat_base).rglob("*.mat"):
+    # for f in Path(pth_mat_base).rglob("*.mat"): # i need to look for both mat and MAT
+    all_mats = list(Path(pth_mat_base).rglob("*.mat")) + list(Path(pth_mat_base).rglob("*.MAT"))
+    for p in all_mats:
         if date_re is not None:
             m = date_re.search(f.name)
             if not m:

@@ -100,7 +100,9 @@ def met_finder(pth_met_base: str,start_date=None, end_date=None):
         met_nc = [pth_met_base]
     else:
         met_nc = []
-        for p in Path(pth_met_base).rglob("*.nc"):
+        # for p in Path(pth_met_base).rglob("*.nc"): # i need to look for both nc and NC
+        all_met_nc = list(Path(pth_met_base).rglob("*.nc")) + list(Path(pth_met_base).rglob("*.NC"))
+        for p in all_met_nc:    
             if start_date is None:
                 met_nc.append(str(p))
                 continue
