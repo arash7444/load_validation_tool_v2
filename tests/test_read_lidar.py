@@ -1,6 +1,6 @@
 # from read_LiDAR_data import load_lidar_data, load_lidar_data_10min
 
-from LoadValidationTool.data_readers import (
+from load_validation_tool.data_readers import (
     load_lidar_data,
     load_lidar_data_10min,
     lidar_finder,
