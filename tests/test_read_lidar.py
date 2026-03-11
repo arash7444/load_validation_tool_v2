@@ -11,8 +11,11 @@ from load_validation_tool.data_readers import (
     NA_cols,
 )
 import pandas as pd
+from pathlib import Path
 
-pth_lidar_base = r"tests\lidar_data"
+pth_lidar_base = Path("tests") / "lidar_data" # use it cross platform
+
+# pth_lidar_base = r"tests\lidar_data"
 
 start = pd.Timestamp("2020-05-01")
 end = pd.Timestamp("2020-05-03") + pd.Timedelta(days=1)
