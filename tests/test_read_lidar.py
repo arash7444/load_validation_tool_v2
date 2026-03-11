@@ -22,9 +22,18 @@ def test_read_lidar():
     end = pd.Timestamp("2020-05-03") + pd.Timedelta(days=1)
 
     lidar_files = lidar_finder(pth_lidar_base, start, end)
-    if lidar_files is None:
-        raise Exception("No lidar files found.")
+    # if lidar_files is None:
+    #     raise Exception("No lidar files found.")
+
+    assert len(lidar_files) > 0, "No lidar files found in tests/lidar_data"
 
     lidar_avg, lidar_numeric, height_lidar, lidar_std = load_lidar_data(lidar_files[0])
-    if len(lidar_avg) == 0:
-        raise Exception("Lidar Dataframe is empty.")
+
+    # if len(lidar_avg) == 0:
+    #     raise Exception("Lidar Dataframe is empty.")
+
+    assert len(lidar_avg) > 0
+    assert len(height_lidar) > 0
+    
+if __name__ == "__main__":
+    test_read_lidar()   
