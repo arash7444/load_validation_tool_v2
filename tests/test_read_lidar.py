@@ -5,7 +5,7 @@ from load_validation_tool.data_readers import (
     load_lidar_data_10min,
     lidar_finder,
 )
-from load_validation_tool.utils import (
+from load_validation_tool.data_readers import (
     detect_heights,
     color_text,
     NA_cols,

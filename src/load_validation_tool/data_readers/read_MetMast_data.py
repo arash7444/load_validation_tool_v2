@@ -6,7 +6,7 @@ from scipy.io import loadmat
 import re
 import os
 from pathlib import Path
-from data_readers.utils import color_text, NA_cols
+from .utils import color_text, NA_cols
 from typing import List, Tuple
 
 def read_met(met_nc_file: str) -> pd.DataFrame:

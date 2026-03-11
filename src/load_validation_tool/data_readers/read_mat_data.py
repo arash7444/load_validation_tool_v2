@@ -1,7 +1,7 @@
 from scipy.io import loadmat
 import numpy as np
 import pandas as pd
-from data_readers.utils import color_text, NA_cols
+from .utils import color_text, NA_cols
 from pathlib import Path
 import os
 import re
