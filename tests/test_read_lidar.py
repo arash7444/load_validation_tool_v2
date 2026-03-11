@@ -5,6 +5,13 @@ from load_validation_tool.data_readers import (
     load_lidar_data_10min,
     lidar_finder,
 )
+from load_validation_tool.utils import (
+    detect_heights,
+    color_text,
+    NA_cols,
+    _SPEED_RE,
+    _DIR_RE,
+)
 import pandas as pd
 
 pth_lidar_base = r"tests\lidar_data"
