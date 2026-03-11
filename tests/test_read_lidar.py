@@ -1,4 +1,10 @@
-from read_LiDAR_data import load_lidar_data, load_lidar_data_10min
+# from read_LiDAR_data import load_lidar_data, load_lidar_data_10min
+
+from LoadValidationTool.data_readers import (
+    load_lidar_data,
+    load_lidar_data_10min,
+    lidar_finder,
+)
 import pandas as pd
 
 pth_lidar_base = r"tests\lidar_data"
